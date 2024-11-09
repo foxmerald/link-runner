@@ -28,8 +28,7 @@ class Link < Character
 
     @ceiling = @window.bottom - JUMP_HEIGHT
 
-    @jumping = false
-    @falling = false
+    @facing = :right
   end
 
   def update

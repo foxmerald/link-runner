@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Access the coordinates of various positions more easily
 module Coords
   def top
     y
@@ -24,5 +25,11 @@ module Coords
   def center_vertical
     y + (height / 2)
   end
-end
 
+  def front
+    case facing
+    when :right then right
+    when :left then left
+    end
+  end
+end
