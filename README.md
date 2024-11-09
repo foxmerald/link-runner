@@ -6,6 +6,13 @@ Link is on his way through the Forbidden Woods, jumping over red Octoroks and tr
 
 Written in Ruby with the [Ruby Gosu Gem](https://github.com/gosu/gosu).
 
+## Getting Started
+
+- install gosu `gem install gosu` (see guides for installing the gem on 
+[macOS](https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X), [Linux](https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux) or
+[Windows](https://github.com/gosu/gosu/wiki/Getting-Started-on-Windows))
+- enter the directory and run `ruby jump_adventure.rb`
+
 ## Screenshots
 
 <img width="1312" alt="Screen Shot 2021-10-15 at 19 25 46" src="https://user-images.githubusercontent.com/12692752/137528579-3c3ee5f5-c328-468e-abb2-e15e9b5e465b.png">
