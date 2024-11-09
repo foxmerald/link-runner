@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
-require 'gosu'
-require_relative '../helpers/coords'
+require_relative 'character'
 
-class Link
-  attr_accessor :x, :y, :width, :height
-
-  include Coords
-
+class Link < Character
   X = 16
   SLOWDOWN = 10
   JUMP_HEIGHT = 360
@@ -15,7 +10,7 @@ class Link
   FALL_STEP = 5
 
   def initialize(window)
-    @window = window
+    super(window)
 
     @width = 96
     @height = 104

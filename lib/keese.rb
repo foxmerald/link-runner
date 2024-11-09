@@ -1,16 +1,13 @@
 # frozen_string_literal: true
 
-require 'gosu'
-require_relative '../helpers/coords'
+require_relative 'character'
 
-class Keese
-  attr_accessor :x, :y, :width, :height
-
-  include Coords
-
+class Keese < Character
   SLOWDOWN = 20
 
   def initialize(window)
+    super(window)
+
     @window = window
 
     @width = 76
@@ -22,11 +19,12 @@ class Keese
 
     @x = @window.width
     @y = @window.bottom - 150
+
+    @facing = :left
   end
 
   def update
     @x = @window.width + 50 if @x < -100
-
     @x -= @window.speed
   end
 

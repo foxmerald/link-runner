@@ -1,17 +1,12 @@
 # frozen_string_literal: true
 
-require 'gosu'
-require_relative '../helpers/coords'
+require_relative 'character'
 
-class Octorok
-  attr_accessor :x, :y, :width, :height
-
-  include Coords
-
+class Octorok < Character
   SLOWDOWN = 20
 
   def initialize(window)
-    @window = window
+    super(window)
 
     @width = 100
     @height = 79
@@ -22,6 +17,8 @@ class Octorok
 
     @x = @window.width
     @y = @window.bottom + 20
+
+    @facing = :left
   end
 
   def update
