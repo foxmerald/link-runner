@@ -7,7 +7,7 @@ require_relative 'helpers/game'
 class JumpAdventure < Gosu::Window
   include Game
 
-  attr_accessor :speed, :frame, :bottom, :game_over, :short_press
+  attr_accessor :speed, :frame, :ground, :ceiling, :game_over, :short_press
 
   def initialize(width = 1200, height = 600, fullscreen: false)
     super

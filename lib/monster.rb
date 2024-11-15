@@ -29,7 +29,7 @@ class Monster < Character
 
   def set_default_position(x_offset: 0, y_offset: 0)
     @x = @window.width + x_offset
-    @y = @window.bottom + y_offset
+    @y = @window.ground + y_offset
   end
 end
 

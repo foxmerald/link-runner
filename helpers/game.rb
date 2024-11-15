@@ -41,19 +41,13 @@ module Game
     close if id == ESC_KEY
 
     @space_down_frame = @frame if id == SPACE_KEY
-    @short_press = false
   end
 
   def button_up(id)
     # pressing "P" restarts the game on game over
-    if id == P_KEY && @game_over
-      restart_game
-      return
-    end
+    return unless id == P_KEY && @game_over
 
-    return if @link.jumping?
-
-    @short_press = true if id == SPACE_KEY && @frame - @space_down_frame <= SHORT_PRESS_FRAME
+    restart_game
   end
 
   def draw
@@ -122,9 +116,9 @@ module Game
   def init_game
     @frame = 0
     @speed = 4
-    @bottom = 440
+    @ground = 440
+    @ceiling = 50
     @game_over = false
-    @short_press = false
     @space_down_frame = 0
 
     @link = Link.new(self)

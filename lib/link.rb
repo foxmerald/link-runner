@@ -24,7 +24,7 @@ class Link < Character
     )[2]
 
     @x = X
-    @y = @window.bottom
+    @y = @window.ground
 
     @ceiling = @window.bottom - JUMP_HEIGHT
 
