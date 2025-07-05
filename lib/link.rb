@@ -2,13 +2,18 @@
 
 require_relative 'character'
 
-# The playable character
+# Link is the playable character class, handling movement and jumping
 class Link < Character
   X = 16
   SLOWDOWN = 10
-  JUMP_VELOCITY = -20  # Initial upward velocity (negative for upward movement)
-  GRAVITY = 0.5        # Gravity pulls the character down
-  MAX_VELOCITY = 20    # Maximum downward velocity to prevent endless fall
+
+  # Constants for jump physics
+  JUMP_VELOCITY_BASE = -14 # Height for jump
+  JUMP_VELOCITY_BOOST = -4 # Additional jump height for long press
+  JUMP_GRAVITY = 0.4
+  FALL_GRAVITY = 0.9
+  MAX_VELOCITY = 20
+  BOOST_MS = 200
 
   def initialize(window)
     super(window)
@@ -16,26 +21,29 @@ class Link < Character
     @width = 96
     @height = 104
 
+    # Load character animation sprites
     @sprites = Gosu::Image.load_tiles(
       @window, 'assets/link.png', @width, @height, true
     )[70..79]
 
+    # Sprite shown on game over
     @game_over_sprite = Gosu::Image.load_tiles(
       @window, 'assets/link.png', @width, @height, true
     )[2]
 
+    # Initial position and state
     @x = X
     @y = @window.ground
 
-    @velocity = 0 
+    @velocity = 0
     @facing = :right
-
-    @framess = 0
+    @jump_pressed_at = nil
+    @jump_boosted = false
+    @frames = 0
   end
 
   def update
-    init_jump if @window.button_down?(Gosu::KbSpace)
-
+    handle_jump_input
     perform_jump if @is_jumping
   end
 
@@ -52,64 +60,80 @@ class Link < Character
     image.draw(@x, @y, 1)
   end
 
+  # Reset character to initial state
   def reset
     @x = X
     @y = @window.ground
     @velocity = 0
     @is_jumping = false
     @is_falling = false
+    @jump_pressed_at = nil
+    @jump_boosted = false
   end
 
   private
 
-  def init_jump
-    # Start the jump if not already in the air (this is assuming we can only jump when grounded)
-    return if @is_jumping
+  # Detect jump press and apply boost if key is held
+  def handle_jump_input
+    return @jump_pressed_at = nil unless @window.button_down?(Gosu::KbSpace)
 
-    @velocity = JUMP_VELOCITY # Set initial jump velocity
+    # Start jump immediately on key down
+    return start_jump if !@is_jumping && !@jump_pressed_at
+
+    add_jump_boost
+  end
+
+  # Begin jump with base velocity
+  def start_jump
+    @velocity = JUMP_VELOCITY_BASE
     @is_jumping = true
     @is_falling = false
+
+    @jump_pressed_at = Gosu.milliseconds
+    @jump_boosted = false
   end
 
-  # Jump upwards until the ceiling is reached and then go down until back on the floor
+  # Apply extra boost during jump if key still held within boost window
+  def add_jump_boost
+    return unless @is_jumping && !@jump_boosted && @jump_pressed_at && Gosu.milliseconds - @jump_pressed_at > BOOST_MS
+
+    @velocity += JUMP_VELOCITY_BOOST
+    @jump_boosted = true
+  end
+
+  # Execute upward or downward motion
   def perform_jump
     @is_falling ? go_down : go_up
-
-    @framess += 1
-    puts @framess
+    @frames += 1
   end
 
+  # Apply upward movement with jump gravity
   def go_up
-    # Apply vertical movement
     @y += @velocity
-    @velocity += GRAVITY # Apply gravity
+    @velocity += JUMP_GRAVITY
 
-    # Check if the jump has reached the apex (the character has reached the ceiling)
-    return if @y >= @window.ceiling
+    # Switch to falling when upward velocity is depleted
+    return unless @velocity >= 0
 
-    # Clamp to ceiling and stop downward velocity
-    @y = @window.ceiling
-    @velocity = 0
     @is_falling = true
   end
 
+  # Apply downward movement with fall gravity
   def go_down
-    # Apply vertical movement and gravity, but clamp max fall speed
     @y += @velocity
-    @velocity = [@velocity + GRAVITY, MAX_VELOCITY].min
+    @velocity = [@velocity + FALL_GRAVITY, MAX_VELOCITY].min
 
-    # Check if the character has hit the ground
+    # Stop falling when reaching ground
     return unless @y >= @window.ground
 
-    # Clamp to the ground and stop downward velocity
     @y = @window.ground
     @velocity = 0
-
     @is_jumping = false
     @is_falling = false
+    @jump_boosted = false
   end
 
-  # Show stretched legs on jumping up and narrow legs on falling down
+  # Sprite depending on jump phase
   def jumping_sprite
     @is_falling ? @sprites[7] : @sprites[5]
   end
