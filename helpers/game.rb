@@ -56,8 +56,22 @@ module Game
 
   private
 
-  def collision?(monster)
-    @link.front >= monster.front && @link.bottom >= monster.top
+  # Checks if link's bounding box overlaps enemy's
+  def collision?(enemy)
+    # link is to the right of enemy
+    return false if @link.left > enemy.right
+
+    # link is to the left of enemy
+    return false if @link.right < enemy.left
+
+    # link is below enemy
+    return false if @link.top > enemy.bottom
+
+    # link is above enemy
+    return false if @link.bottom < enemy.top
+
+    # If none of the above are true, they must be colliding
+    true
   end
 
   def show_game_over
