@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative 'character'
 
 # parent class for all monsters
@@ -7,7 +5,7 @@ class Monster < Character
   SLOWDOWN = 20
 
   def initialize(window)
-    super(window)
+    super
 
     @facing = :left
   end
@@ -36,7 +34,7 @@ end
 # ground enemy
 class Octorok < Monster
   def initialize(window)
-    super(window)
+    super
 
     @width = 100
     @height = 79
@@ -56,7 +54,7 @@ end
 # flying enemy
 class Keese < Monster
   def initialize(window)
-    super(window)
+    super
 
     @width = 76
     @height = 72

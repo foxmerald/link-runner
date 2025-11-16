@@ -1,0 +1,14 @@
+AllCops:
+  NewCops: enable
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: never
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Max: 100
+
+Metrics/MethodLength:
+  Max: 20

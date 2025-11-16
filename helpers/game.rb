@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require_relative '../lib/background'
 require_relative '../lib/link'
 require_relative '../lib/monster'
@@ -15,7 +13,6 @@ module Game
   P_KEY = Gosu::KbP
 
   # Gosu specific methods
-
   def update
     return if @game_over
 
@@ -26,11 +23,7 @@ module Game
     @keese.update
     @background.update
 
-    # TODO: fix deprecation
-    # "DEPRECATION WARNING: Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html"
-    @score = Gosu::Image.from_text(
-      self, "Score: #{(@background.x / 50).abs}", Gosu.default_font_name, 30
-    )
+    @score = Gosu::Image.from_text("Score: #{(@background.x / 50).abs}", 30)
 
     increase_speed
 
@@ -80,18 +73,14 @@ module Game
 
   def game_over_text
     game_over_text = Gosu::Image.new('assets/game_over.png')
-    x = width / 2 - game_over_text.width / 2
-    y = height / 2 - game_over_text.height / 2
+    x = (width / 2) - (game_over_text.width / 2)
+    y = (height / 2) - (game_over_text.height / 2)
     game_over_text.draw(x, y, 100)
   end
 
   def restart_options
-    # TODO: fix deprecation
-    # "DEPRECATION WARNING: Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html"
-    restart_options = Gosu::Image.from_text(
-      self, 'Press [P] to try again. Press [Esc] to exit.', Gosu.default_font_name, 30
-    )
-    x = width / 2 - restart_options.width / 2
+    restart_options = Gosu::Image.from_text('Press [P] to try again. Press [Esc] to exit.', 30)
+    x = (width / 2) - (restart_options.width / 2)
     y = height - 35
     restart_options.draw(x, y, 100)
   end
@@ -108,7 +97,7 @@ module Game
   end
 
   def increase_speed
-    increased_speed = @frame / 750 + BASE_SPEED
+    increased_speed = (@frame / 750) + BASE_SPEED
 
     @speed = increased_speed
   end

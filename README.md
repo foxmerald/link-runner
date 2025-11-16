@@ -30,3 +30,4 @@ Handle monsters:
 
 Gameplay
 - [ ] add increasing speed
+- [ ] add levels or similar to increase difficulty, spawn keese, etc.

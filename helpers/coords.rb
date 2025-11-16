@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Access the coordinates of various positions more easily
 module Coords
   def top
