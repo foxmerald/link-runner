@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'gosu'
-
-# moving background image
+# Moving background image
 class Background
   attr_accessor :x, :y, :width, :height
 

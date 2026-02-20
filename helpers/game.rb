@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../lib/background'
-require_relative '../lib/link'
-require_relative '../lib/monster'
-
-# This takes care of the basic game functionality
 module Game
   BASE_SPEED = 0
   MAX_SPEED = 10
@@ -82,6 +77,8 @@ module Game
     if @score_val - @last_white_keese_score >= WHITE_KEESE_SPAWN_INTERVAL
       # Calculate a random variance for the next spawn interval (e.g., +/- 50 points)
       variance = rand(-20..20)
+
+      play_sound('white_keese')
 
       @obstacles << WhiteKeese.new(self)
       @last_white_keese_score = @score_val + variance
@@ -199,20 +196,31 @@ module Game
   end
 
   def show_game_over
-    draw_explosion
-
+    draw_collision
+    play_sound('game_over3', once: true)
     game_over_text
+
     restart_options
   end
 
-  def play_collision_sound
-    return if @collision_sound_count > 0
+  def play_sound(name, once: false)
+    return if @played_sounds[name]
 
-    @punch_sound.play
-    @collision_sound_count += 1
+    @sounds[name] ||= Gosu::Sample.new("assets/sounds/#{name}.mp3")
+    @sounds[name].play
+
+    @played_sounds[name] = true if once
   end
 
-  def draw_explosion
+  def increase_speed
+    return if @speed >= MAX_SPEED
+
+    increased_speed = (@frame / 1000) + 3
+
+    @speed = [increased_speed, MAX_SPEED].min
+  end
+
+  def draw_collision
     explosion = Gosu::Image.new('assets/sprites/collision.png')
     explosion.draw(@link.x, @link.y, 100)
   end
@@ -231,46 +239,39 @@ module Game
     restart_options.draw(x, y, 100)
   end
 
-  def restart_game
+  def reset_values
     @frame = 0
-    @speed = 4
+    @speed = 3
 
-    @cluster_count = 0
-    @link.reset
+    @sounds = {}
+    @played_sounds = {}
+
     @obstacles = []
+    @cluster_count = 0
     @next_spawn = 0
-    @collision_sound_count = 0
-    @current_score = 0
+    @last_white_keese_score = 400
 
     @game_over = false
   end
 
-  def increase_speed
-    return if @speed >= MAX_SPEED
+  def restart_game
+    @sounds = {}
+    @played_sounds = {}
+    @current_score = 0
 
-    increased_speed = (@frame / 1000) + 3
+    @link.reset
 
-    @speed = [increased_speed, MAX_SPEED].min
+    reset_values
   end
 
   def init_game
-    @frame = 0
-    @speed = 3
     @ground = 440
     @ceiling = 50
-    @game_over = false
-    @collision_sound_count = 0
     @space_down_frame = 0
 
-    @cluster_count = 0
-
-    # Moving objects
     @link = Link.new(self)
-    @obstacles = []
-    @next_spawn = 0
     @background = Background.new(self)
 
-    # Sounds
-    @punch_sound = Gosu::Sample.new('assets/sounds/punch.mp3')
+    reset_values
   end
 end

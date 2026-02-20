@@ -3,7 +3,8 @@
 require 'gosu'
 require 'pry'
 
-require_relative 'helpers/game'
+Dir.glob('helpers/*.rb').each { |file| require_relative file }
+Dir.glob('lib/*.rb').each { |file| require_relative file }
 
 class JumpAdventure < Gosu::Window
   include Game

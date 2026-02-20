@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'character'
-
 # Link is the playable character class, handling movement and jumping
 class Link < Character
   X = 16

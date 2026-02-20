@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'character'
-
-# parent class for all monsters
+# Parent class for all monsters
 class Monster < Character
   SLOWDOWN = 20
 
