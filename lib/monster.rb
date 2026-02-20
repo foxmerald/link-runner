@@ -3,6 +3,7 @@
 # Parent class for all monsters
 class Monster < Character
   SLOWDOWN = 20
+  KEESE_Y_OFFSETS = [-150, -60, 20]
 
   def initialize(window)
     super
@@ -19,10 +20,9 @@ class Monster < Character
   end
 
   def draw
-    # @sprites.size
-    f = (@window.frame / SLOWDOWN) % 4
-
-    image = @sprites[f]
+    # Pick the correct sprite based on the current frame and monster type
+    frame = (@window.frame / SLOWDOWN) % @sprites.size
+    image = @sprites[frame]
 
     image.draw(@x, @y, 1)
   end
@@ -35,7 +35,7 @@ class Monster < Character
   end
 end
 
-# ground enemy
+# Ground enemy
 class Octorok < Monster
   def initialize(window, score = 0)
     super(window)
@@ -57,7 +57,7 @@ class Octorok < Monster
   end
 end
 
-# flying enemy
+# Flying enemy
 class Keese < Monster
   def initialize(window)
     super
@@ -69,16 +69,11 @@ class Keese < Monster
       @window, 'assets/sprites/keese.png', @width, @height, true
     )
 
-    # 3 positions:
-    # 1. High up (current) -> -150
-    # 2. Middle (stacked on 1 Octorok) -> -60
-    # 3. Ground (same top as Octorok) -> 20
-    possible_offsets = [-150, -60, 20]
-    set_default_position(y_offset: possible_offsets.sample)
+    set_default_position(y_offset: KEESE_Y_OFFSETS.sample)
   end
 end
 
-# stronger flying enemy
+# Stronger flying enemy
 class WhiteKeese < Keese
   def initialize(window)
     super
