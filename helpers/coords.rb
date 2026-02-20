@@ -3,19 +3,19 @@
 # Access the coordinates of various positions more easily
 module Coords
   def top
-    y
+    y + 20
   end
 
   def bottom
-    y + height
+    y + height - 10
   end
 
   def left
-    x
+    x + 24
   end
 
   def right
-    x + width
+    x + width - 24
   end
 
   def center_horizontal

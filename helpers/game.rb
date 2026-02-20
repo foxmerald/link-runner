@@ -6,7 +6,7 @@ require_relative '../lib/monster'
 
 # This takes care of the basic game functionality
 module Game
-  BASE_SPEED = 4
+  BASE_SPEED = 0
   MAX_SPEED = 10
   SHORT_PRESS_FRAME = 15
 
@@ -33,7 +33,7 @@ module Game
 
     @obstacles.delete_if(&:off_screen?)
 
-    @score = Gosu::Image.from_text("Score: #{(@background.x / 50).abs}", 30)
+    @score = Gosu::Image.from_text("Score: #{(@background.x / 10).abs.to_i}", 30)
 
     increase_speed
   end
@@ -143,14 +143,14 @@ module Game
   def increase_speed
     return if @speed >= MAX_SPEED
 
-    increased_speed = (@frame / 1000) + BASE_SPEED
+    increased_speed = (@frame / 1000) + 3
 
     @speed = [increased_speed, MAX_SPEED].min
   end
 
   def init_game
     @frame = 0
-    @speed = 4
+    @speed = 3
     @ground = 440
     @ceiling = 50
     @game_over = false

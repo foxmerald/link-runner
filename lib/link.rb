@@ -8,10 +8,10 @@ class Link < Character
   SLOWDOWN = 10
 
   # Constants for jump physics
-  JUMP_VELOCITY_BASE = -14 # Height for jump
+  JUMP_VELOCITY_BASE = -15 # Height for jump
   JUMP_VELOCITY_BOOST = -4 # Additional jump height for long press
   JUMP_GRAVITY = 0.4
-  FALL_GRAVITY = 0.9
+  FALL_GRAVITY = 0.6
   MAX_VELOCITY = 20
   BOOST_MS = 200
 
@@ -115,7 +115,7 @@ class Link < Character
     @velocity += JUMP_GRAVITY
 
     # Switch to falling when upward velocity is depleted
-    return unless @velocity >= 0
+    return if @velocity < 0
 
     @is_falling = true
   end
@@ -126,7 +126,7 @@ class Link < Character
     @velocity = [@velocity + FALL_GRAVITY, MAX_VELOCITY].min
 
     # Stop falling when reaching ground
-    return unless @y >= @window.ground
+    return if @y < @window.ground
 
     @y = @window.ground
     @velocity = 0

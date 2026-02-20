@@ -18,13 +18,16 @@ class Background
   end
 
   def update
-    @x -= @window.speed / 4
+    @x -= @window.speed / 4.0
   end
 
   def draw
-    next_x = @x % - @background.width
+    # Ensure background loops smoothly without gaps
+    bg_width = @background.width
+    offset_x = (@x % bg_width).round
 
-    @background.draw(next_x, @y, 0)
-    @background.draw(next_x + @background.width, @y, 0) if next_x < (@background.width - @window.width)
+    @background.draw(offset_x, @y, 0)
+    @background.draw(offset_x - bg_width, @y, 0)
+    @background.draw(offset_x + bg_width, @y, 0)
   end
 end
