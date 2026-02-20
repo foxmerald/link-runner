@@ -6,12 +6,35 @@ Link is on his way through the Forbidden Woods, jumping over red Octoroks and tr
 
 Written in Ruby with the [Ruby Gosu Gem](https://github.com/gosu/gosu).
 
-## Getting Started
+## Running the game
 
-- install gosu `gem install gosu` (see guides for installing the gem on 
-[macOS](https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X), [Linux](https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux) or
-[Windows](https://github.com/gosu/gosu/wiki/Getting-Started-on-Windows))
-- enter the directory and run `ruby jump_adventure.rb`
+### Install with Homebrew
+
+```sh
+# Clone the repo
+git clone 
+
+# Install dependencies
+brew install sdl2
+
+bundle install
+```
+
+### Execute the program
+
+You can run the game with 
+```sh
+bundle exec ruby jump_adventure.rb
+```
+
+or for a shortcut
+```sh
+# Make the script executable
+chmod +x play
+
+# Then simply use the shortcut
+./play
+```
 
 ## Screenshots
 
