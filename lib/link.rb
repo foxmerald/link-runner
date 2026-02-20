@@ -83,7 +83,7 @@ class Link < Character
 
   # Begin jump with base velocity
   def start_jump
-    jump_sound.play
+    @window.play_sound('jump')
 
     @velocity = JUMP_VELOCITY_BASE
     @is_jumping = true
@@ -136,9 +136,5 @@ class Link < Character
   # Sprite depending on jump phase
   def jumping_sprite
     @is_falling ? @sprites[7] : @sprites[5]
-  end
-
-  def jump_sound
-    @jump_sound ||= Gosu::Sample.new('assets/sounds/jump.mp3')
   end
 end

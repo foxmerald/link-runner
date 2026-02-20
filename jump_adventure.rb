@@ -8,6 +8,7 @@ Dir.glob('lib/*.rb').each { |file| require_relative file }
 
 class JumpAdventure < Gosu::Window
   include Game
+  include Sound
 
   attr_accessor :speed, :frame, :ground, :ceiling, :game_over, :short_press
 

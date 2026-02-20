@@ -168,10 +168,10 @@ module Game
   # Randomly choose between Octorok (ground) and Keese (air)
   # Weight towards Octorok (90%)
   def new_obstacle
-    return Octorok.new(self, @current_score || 0) if @current_score.to_i < 200
+    return Octorok.new(self, @current_score) if @current_score.to_i < 200
 
     if rand < 0.90
-      Octorok.new(self, @current_score || 0)
+      Octorok.new(self, @current_score)
     else
       Keese.new(self)
     end
@@ -203,15 +203,6 @@ module Game
     restart_options
   end
 
-  def play_sound(name, once: false)
-    return if @played_sounds[name]
-
-    @sounds[name] ||= Gosu::Sample.new("assets/sounds/#{name}.mp3")
-    @sounds[name].play
-
-    @played_sounds[name] = true if once
-  end
-
   def increase_speed
     return if @speed >= MAX_SPEED
 
@@ -239,11 +230,18 @@ module Game
     restart_options.draw(x, y, 100)
   end
 
+  def restart_game
+    @link.reset
+    @background.reset
+
+    reset_values
+  end
+
   def reset_values
     @frame = 0
     @speed = 3
+    @current_score = 0
 
-    @sounds = {}
     @played_sounds = {}
 
     @obstacles = []
@@ -252,16 +250,6 @@ module Game
     @last_white_keese_score = 400
 
     @game_over = false
-  end
-
-  def restart_game
-    @sounds = {}
-    @played_sounds = {}
-    @current_score = 0
-
-    @link.reset
-
-    reset_values
   end
 
   def init_game
