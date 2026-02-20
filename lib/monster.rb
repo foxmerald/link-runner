@@ -40,7 +40,7 @@ class Octorok < Monster
     @height = 79
 
     @sprites = Gosu::Image.load_tiles(
-      @window, 'assets/octorok_red.png', @width, @height, true
+      @window, 'assets/sprites/octorok_red.png', @width, @height, true
     )
 
     set_default_position(y_offset: 20)
@@ -60,7 +60,7 @@ class Keese < Monster
     @height = 72
 
     @sprites = Gosu::Image.load_tiles(
-      @window, 'assets/keese.png', @width, @height, true
+      @window, 'assets/sprites/keese.png', @width, @height, true
     )
 
     set_default_position(y_offset: -150)

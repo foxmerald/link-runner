@@ -81,12 +81,12 @@ module Game
   end
 
   def explosion
-    explosion = Gosu::Image.new('assets/collision.png')
+    explosion = Gosu::Image.new('assets/sprites/collision.png')
     explosion.draw(@link.x, @link.y, 100)
   end
 
   def game_over_text
-    game_over_text = Gosu::Image.new('assets/game_over.png')
+    game_over_text = Gosu::Image.new('assets/sprites/game_over.png')
     x = (width / 2) - (game_over_text.width / 2)
     y = (height / 2) - (game_over_text.height / 2)
     game_over_text.draw(x, y, 100)
