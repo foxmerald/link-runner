@@ -21,7 +21,8 @@ class Monster < Character
   end
 
   def draw
-    f = (@window.frame / SLOWDOWN) % 4 # @sprites.size
+    # @sprites.size
+    f = (@window.frame / SLOWDOWN) % 4
 
     image = @sprites[f]
 
@@ -76,5 +77,20 @@ class Keese < Monster
     # 3. Ground (same top as Octorok) -> 20
     possible_offsets = [-150, -60, 20]
     set_default_position(y_offset: possible_offsets.sample)
+  end
+end
+
+# stronger flying enemy
+class WhiteKeese < Keese
+  def initialize(window)
+    super
+
+    @sprites = Gosu::Image.load_tiles(
+      @window, 'assets/sprites/keese_white.png', @width, @height, true
+    )
+  end
+
+  def update
+    @x -= @window.speed * 2
   end
 end

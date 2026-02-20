@@ -18,6 +18,7 @@ module Game
   CLUSTER_CHANCE = 0.20
   CLUSTER_CONTINUE_CHANCE = 0.70
   TIGHT_GAP_RANGE = 30..50
+  WHITE_KEESE_SPAWN_INTERVAL = 150
 
   # Main game loop - update positions, check for collisions, spawn new obstacles and increase speed
   def update
@@ -29,6 +30,7 @@ module Game
     @background.update
 
     spawn_check
+    spawn_white_keese_check
 
     @obstacles.each do |obstacle|
       obstacle.update
@@ -68,6 +70,23 @@ module Game
   end
 
   private
+
+  def spawn_white_keese_check
+    @score_val = @current_score || 0
+    return if @score_val < 400
+
+    # Initialize last spawn score if it doesn't exist
+    @last_white_keese_score ||= 400
+
+    # Check if enough score has passed since the last spawn
+    if @score_val - @last_white_keese_score >= WHITE_KEESE_SPAWN_INTERVAL
+      # Calculate a random variance for the next spawn interval (e.g., +/- 50 points)
+      variance = rand(-20..20)
+
+      @obstacles << WhiteKeese.new(self)
+      @last_white_keese_score = @score_val + variance
+    end
+  end
 
   # Check if it's time to spawn a new obstacle and whether it should be part of a monster-cluster
   def spawn_check
