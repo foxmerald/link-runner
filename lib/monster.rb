@@ -38,14 +38,20 @@ end
 
 # ground enemy
 class Octorok < Monster
-  def initialize(window)
-    super
+  def initialize(window, score = 0)
+    super(window)
 
     @width = 100
     @height = 79
 
+    color = case (score / 100) % 3
+    when 0 then 'red'
+    when 1 then 'blue'
+    when 2 then 'yellow'
+    end
+
     @sprites = Gosu::Image.load_tiles(
-      @window, 'assets/sprites/octorok_red.png', @width, @height, true
+      @window, "assets/sprites/octorok_#{color}.png", @width, @height, true
     )
 
     set_default_position(y_offset: 20)
@@ -64,6 +70,11 @@ class Keese < Monster
       @window, 'assets/sprites/keese.png', @width, @height, true
     )
 
-    set_default_position(y_offset: -150)
+    # 3 positions:
+    # 1. High up (current) -> -150
+    # 2. Middle (stacked on 1 Octorok) -> -60
+    # 3. Ground (same top as Octorok) -> 20
+    possible_offsets = [-150, -60, 20]
+    set_default_position(y_offset: possible_offsets.sample)
   end
 end
