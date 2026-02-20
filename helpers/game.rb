@@ -75,12 +75,14 @@ module Game
   end
 
   def show_game_over
-    explosion
+    draw_explosion
+    @punch_sound.play
+
     game_over_text
     restart_options
   end
 
-  def explosion
+  def draw_explosion
     explosion = Gosu::Image.new('assets/sprites/collision.png')
     explosion.draw(@link.x, @link.y, 100)
   end
@@ -124,9 +126,13 @@ module Game
     @game_over = false
     @space_down_frame = 0
 
+    # Moving objects
     @link = Link.new(self)
     @octorok = Octorok.new(self)
     @keese = Keese.new(self)
     @background = Background.new(self)
+
+    # Sounds
+    @punch_sound = Gosu::Sample.new('assets/sounds/punch.mp3')
   end
 end
