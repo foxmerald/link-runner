@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/background'
 require_relative '../lib/link'
 require_relative '../lib/monster'
@@ -5,6 +7,7 @@ require_relative '../lib/monster'
 # This takes care of the basic game functionality
 module Game
   BASE_SPEED = 4
+  MAX_SPEED = 10
   SHORT_PRESS_FRAME = 15
 
   # Keyboard
@@ -19,15 +22,20 @@ module Game
     @frame += 1
 
     @link.update
-    @octorok.update
-    @keese.update
     @background.update
+
+    spawn_obstacle
+
+    @obstacles.each do |obstacle|
+      obstacle.update
+      @game_over = true if collision?(obstacle)
+    end
+
+    @obstacles.delete_if(&:off_screen?)
 
     @score = Gosu::Image.from_text("Score: #{(@background.x / 50).abs}", 30)
 
     increase_speed
-
-    @game_over = true if collision?(@octorok)
   end
 
   def button_down(id)
@@ -45,8 +53,7 @@ module Game
 
   def draw
     @link.draw
-    @octorok.draw
-    @keese.draw
+    @obstacles.each(&:draw)
     @background.draw
 
     @score.draw(0, 0, 100)
@@ -55,6 +62,27 @@ module Game
   end
 
   private
+
+  def spawn_obstacle
+    # If there are no obstacles, or the last one is far enough to the left
+    if @obstacles.empty? || (@obstacles.last.x < width - @next_spawn)
+      # Randomly choose between Octorok (ground) and Keese (air)
+      # Weight it towards Octorok (95%)
+      new_obstacle = if rand < 0.95
+        Octorok.new(self)
+      else
+        Keese.new(self)
+      end
+
+      @obstacles << new_obstacle
+
+      # Calculate when the next spawn should happen
+      # Minimum gap plus a random variation
+      # As speed increases, the minimum gap should increase slightly to be fair
+      min_gap = 400 + (@speed * 10)
+      @next_spawn = rand(min_gap..min_gap + 400)
+    end
+  end
 
   # Checks if link's bounding box overlaps enemy's
   def collision?(enemy)
@@ -106,16 +134,18 @@ module Game
     @speed = 4
 
     @link.reset
-    @octorok.reset
-    @keese.reset
+    @obstacles = []
+    @next_spawn = 0
 
     @game_over = false
   end
 
   def increase_speed
-    increased_speed = (@frame / 750) + BASE_SPEED
+    return if @speed >= MAX_SPEED
 
-    @speed = increased_speed
+    increased_speed = (@frame / 1000) + BASE_SPEED
+
+    @speed = [increased_speed, MAX_SPEED].min
   end
 
   def init_game
@@ -128,8 +158,8 @@ module Game
 
     # Moving objects
     @link = Link.new(self)
-    @octorok = Octorok.new(self)
-    @keese = Keese.new(self)
+    @obstacles = []
+    @next_spawn = 0
     @background = Background.new(self)
 
     # Sounds

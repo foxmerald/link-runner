@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'character'
 
 # parent class for all monsters
@@ -11,8 +13,11 @@ class Monster < Character
   end
 
   def update
-    @x = @window.width + 50 if @x < -100
     @x -= @window.speed
+  end
+
+  def off_screen?
+    @x < -@width
   end
 
   def draw
@@ -45,10 +50,6 @@ class Octorok < Monster
 
     set_default_position(y_offset: 20)
   end
-
-  def reset
-    set_default_position(y_offset: 20)
-  end
 end
 
 # flying enemy
@@ -63,10 +64,6 @@ class Keese < Monster
       @window, 'assets/sprites/keese.png', @width, @height, true
     )
 
-    set_default_position(y_offset: -150)
-  end
-
-  def reset
     set_default_position(y_offset: -150)
   end
 end

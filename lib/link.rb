@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'character'
 
 # Link is the playable character class, handling movement and jumping
@@ -49,11 +51,11 @@ class Link < Character
     return @game_over_sprite.draw(@x, @y, 1) if @window.game_over
 
     image = if @is_jumping
-              jumping_sprite
-            else
-              f = (@window.frame / SLOWDOWN) % @sprites.size
-              @sprites[f]
-            end
+      jumping_sprite
+    else
+      f = (@window.frame / SLOWDOWN) % @sprites.size
+      @sprites[f]
+    end
 
     image.draw(@x, @y, 1)
   end
