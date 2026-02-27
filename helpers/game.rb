@@ -189,6 +189,8 @@ module Game
 
   # Checks if link's bounding box overlaps enemy's
   def collision?(enemy)
+    return false if invincible
+
     # link is to the right of enemy
     return false if @link.left > enemy.right
 
