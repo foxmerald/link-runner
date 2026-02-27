@@ -24,17 +24,9 @@ module Game
     @link.update
     @background.update
 
-    spawn_check
-    spawn_white_keese_check
+    update_obstacles
 
-    @obstacles.each do |obstacle|
-      obstacle.update
-      @game_over = true if collision?(obstacle)
-    end
-
-    @obstacles.delete_if(&:off_screen?)
-
-    @current_score = (@background.x / 10).abs.to_i
+    update_score
 
     increase_speed
   end
@@ -58,7 +50,7 @@ module Game
     @obstacles.each(&:draw)
     @background.draw
 
-    score = Gosu::Image.from_text("Score: #{@current_score}", 30)
+    score = Gosu::Image.from_text("Score: #{@current_score.to_i}", 30)
     score.draw(0, 0, 100)
 
     show_game_over if @game_over
@@ -66,7 +58,25 @@ module Game
 
   private
 
-  def spawn_white_keese_check
+  def update_score
+    @current_score += (@speed / 10.0)
+  end
+
+  def update_obstacles
+    spawn_obstacles
+    spawn_special_keese
+
+    @obstacles.each do |obstacle|
+      obstacle.update
+      @game_over = true if collision?(obstacle)
+    end
+
+    @obstacles.delete_if(&:off_screen?)
+  end
+
+  # Special fast white keese appear every 150 points after score 400,
+  # with some random variance to avoid predictability
+  def spawn_special_keese
     @score_val = @current_score || 0
     return if @score_val < 400
 
@@ -86,7 +96,7 @@ module Game
   end
 
   # Check if it's time to spawn a new obstacle and whether it should be part of a monster-cluster
-  def spawn_check
+  def spawn_obstacles
     # If there are no obstacles, or the last one is far enough to the left
     return unless @obstacles.empty? || (@obstacles.last.x < width - @next_spawn)
 
@@ -102,8 +112,8 @@ module Game
     end
   end
 
+  # 1 extra obstacle per 200 points, capped at 5
   def max_cluster_size
-    # 1 extra obstacle per 200 points, capped at 5
     [(@score_val / 200).to_i + 1, 5].min
   end
 
@@ -233,6 +243,7 @@ module Game
   def restart_game
     @link.reset
     @background.reset
+    @current_score = 0
 
     reset_values
   end
@@ -240,7 +251,6 @@ module Game
   def reset_values
     @frame = 0
     @speed = 3
-    @current_score = 0
 
     @played_sounds = {}
 
@@ -256,6 +266,7 @@ module Game
     @ground = 440
     @ceiling = 50
     @space_down_frame = 0
+    @current_score = start_score || 0
 
     @link = Link.new(self)
     @background = Background.new(self)

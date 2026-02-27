@@ -8,4 +8,4 @@ if [ $? -ne 0 ]; then
 fi
 
 # Run the game
-bundle exec ruby jump_adventure.rb
+bundle exec ruby jump_adventure.rb "$@"

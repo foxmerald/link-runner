@@ -49,8 +49,10 @@ class Link < Character
     return @game_over_sprite.draw(@x, @y, 1) if @window.game_over
 
     image = if @is_jumping
+      # jump animation
       jumping_sprite
     else
+      # run animation
       f = (@window.frame / SLOWDOWN) % @sprites.size
       @sprites[f]
     end

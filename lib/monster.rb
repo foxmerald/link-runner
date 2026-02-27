@@ -43,7 +43,7 @@ class Octorok < Monster
     @width = 100
     @height = 79
 
-    color = case (score / 100) % 3
+    color = case (score.to_i / 100) % 3
     when 0 then 'red'
     when 1 then 'blue'
     when 2 then 'yellow'
