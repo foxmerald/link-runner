@@ -1,19 +1,21 @@
 # frozen_string_literal: true
 
 module Game
+  # Speed and scoring
   BASE_SPEED = 0
-  MAX_SPEED = 10
-  SHORT_PRESS_FRAME = 15
+  INITIAL_SPEED = 5
+  MAX_SPEED = 20
+  SPEED_INCREASE_FACTOR = 500
 
   # Keyboard
   SPACE_KEY = Gosu::KbSpace
   ESC_KEY = Gosu::KbEscape
   P_KEY = Gosu::KbP
 
+  # Monster cluster spawning
   CLUSTER_CHANCE = 0.20
   CLUSTER_CONTINUE_CHANCE = 0.70
   TIGHT_GAP_RANGE = 30..50
-  WHITE_KEESE_SPAWN_INTERVAL = 150
 
   # Main game loop - update positions, check for collisions, spawn new obstacles and increase speed
   def update
@@ -83,9 +85,13 @@ module Game
     # Initialize last spawn score if it doesn't exist
     @last_white_keese_score ||= 400
 
-    # Check if enough score has passed since the last spawn
-    if @score_val - @last_white_keese_score >= WHITE_KEESE_SPAWN_INTERVAL
-      # Calculate a random variance for the next spawn interval (e.g., +/- 50 points)
+    # Check if enough score has passed since the last spawn (dynamic interval based on speed)
+    # Target ~5-10 seconds. Points per second = (Speed / 10.0) * 60 = 6 * Speed.
+    # So for ~8 seconds: 8 * 6 * Speed = 48 * Speed.
+    current_interval = 48 * @speed
+
+    if @score_val - @last_white_keese_score >= current_interval
+      # Calculate a random variance for the next spawn interval
       variance = rand(-20..20)
 
       play_sound('white_keese')
@@ -218,9 +224,9 @@ module Game
   def increase_speed
     return if @speed >= MAX_SPEED
 
-    increased_speed = (@frame / 1000) + 3
+    target_speed = (@current_score / SPEED_INCREASE_FACTOR) + INITIAL_SPEED
 
-    @speed = [increased_speed, MAX_SPEED].min
+    @speed = [target_speed, MAX_SPEED].min
   end
 
   def draw_collision
@@ -244,15 +250,14 @@ module Game
 
   def restart_game
     @link.reset
-    @background.reset
-    @current_score = 0
 
     reset_values
   end
 
   def reset_values
     @frame = 0
-    @speed = 3
+    @speed = INITIAL_SPEED
+    @current_score = start_score || 0
 
     @played_sounds = {}
 
@@ -268,7 +273,6 @@ module Game
     @ground = 440
     @ceiling = 50
     @space_down_frame = 0
-    @current_score = start_score || 0
 
     @link = Link.new(self)
     @background = Background.new(self)

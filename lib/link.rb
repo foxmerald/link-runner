@@ -6,8 +6,8 @@ class Link < Character
   SLOWDOWN = 10
 
   # Constants for jump physics
-  JUMP_VELOCITY_BASE = -15 # Height for jump
-  JUMP_VELOCITY_BOOST = -4 # Additional jump height for long press
+  JUMP_VELOCITY_BASE = -12 # Height for jump
+  JUMP_VELOCITY_BOOST = -7 # Additional jump height for long press
   JUMP_GRAVITY = 0.4
   FALL_GRAVITY = 0.6
   MAX_VELOCITY = 20
