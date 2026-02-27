@@ -20,6 +20,11 @@ class Monster < Character
   end
 
   def draw
+    if @window.draft
+      Gosu.draw_rect(@x, @y, @width, @height, Gosu::Color::RED, 1)
+      return
+    end
+
     # Pick the correct sprite based on the current frame and monster type
     frame = (@window.frame / SLOWDOWN) % @sprites.size
     image = @sprites[frame]

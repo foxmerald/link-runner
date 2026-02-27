@@ -19,6 +19,8 @@ class Background
   end
 
   def draw
+    return if @window.draft
+
     # Ensure background loops smoothly without gaps
     bg_width = @background.width
     offset_x = (@x % bg_width).round

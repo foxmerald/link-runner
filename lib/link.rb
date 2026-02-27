@@ -46,6 +46,12 @@ class Link < Character
   end
 
   def draw
+    if @window.draft
+      color = @window.game_over ? Gosu::Color::GRAY : Gosu::Color::GREEN
+      Gosu.draw_rect(@x, @y, @width, @height, color, 1)
+      return
+    end
+
     return @game_over_sprite.draw(@x, @y, 1) if @window.game_over
 
     image = if @is_jumping

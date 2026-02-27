@@ -3,6 +3,8 @@
 # Sound effects helper module
 module Sound
   def play_sound(name, once: false)
+    return if muted
+
     @sounds ||= {}
     @played_sounds ||= {}
 
