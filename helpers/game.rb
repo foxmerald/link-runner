@@ -52,8 +52,7 @@ module Game
     @obstacles.each(&:draw)
     @background.draw
 
-    score = Gosu::Image.from_text("Score: #{@current_score.to_i}", 30)
-    score.draw(0, 0, 100)
+    @font.draw_text("Score: #{@current_score.to_i}", 0, 0, 100)
 
     show_game_over if @game_over
   end
@@ -230,22 +229,22 @@ module Game
   end
 
   def draw_collision
-    explosion = Gosu::Image.new('assets/sprites/collision.png')
+    explosion = @sprites[:collision]
     explosion.draw(@link.x, @link.y, 100)
   end
 
   def game_over_text
-    game_over_text = Gosu::Image.new('assets/sprites/game_over.png')
+    game_over_text = @sprites[:game_over]
     x = (width / 2) - (game_over_text.width / 2)
     y = (height / 2) - (game_over_text.height / 2)
     game_over_text.draw(x, y, 100)
   end
 
   def restart_options
-    restart_options = Gosu::Image.from_text('Press [P] to try again. Press [Esc] to exit.', 30)
-    x = (width / 2) - (restart_options.width / 2)
+    @restart_image ||= Gosu::Image.from_text('Press [P] to try again. Press [Esc] to exit.', 30)
+    x = (width / 2) - (@restart_image.width / 2)
     y = height - 35
-    restart_options.draw(x, y, 100)
+    @restart_image.draw(x, y, 100)
   end
 
   def restart_game

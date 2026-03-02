@@ -8,7 +8,7 @@ class Background
 
   def initialize(window)
     @window = window
-    @background = Gosu::Image.new('assets/sprites/background.png')
+    @background = @window.sprites[:background]
 
     @x = 0
     @y = 0

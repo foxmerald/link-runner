@@ -20,14 +20,10 @@ class Link < Character
     @height = 104
 
     # Load character animation sprites
-    @sprites = Gosu::Image.load_tiles(
-      @window, 'assets/sprites/link.png', @width, @height, true
-    )[70..79]
+    @sprites = @window.sprites[:link][70..79]
 
     # Sprite shown on game over
-    @game_over_sprite = Gosu::Image.load_tiles(
-      @window, 'assets/sprites/link.png', @width, @height, true
-    )[2]
+    @game_over_sprite = @window.sprites[:link][2]
 
     # Initial position and state
     @x = X

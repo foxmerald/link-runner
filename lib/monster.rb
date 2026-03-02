@@ -49,14 +49,12 @@ class Octorok < Monster
     @height = 79
 
     color = case (score.to_i / 100) % 3
-    when 0 then 'red'
-    when 1 then 'blue'
-    when 2 then 'yellow'
+    when 0 then :octorok_red
+    when 1 then :octorok_blue
+    when 2 then :octorok_yellow
     end
 
-    @sprites = Gosu::Image.load_tiles(
-      @window, "assets/sprites/octorok_#{color}.png", @width, @height, true
-    )
+    @sprites = @window.sprites[color]
 
     set_default_position(y_offset: 20)
   end
@@ -70,9 +68,7 @@ class Keese < Monster
     @width = 76
     @height = 72
 
-    @sprites = Gosu::Image.load_tiles(
-      @window, 'assets/sprites/keese.png', @width, @height, true
-    )
+    @sprites = @window.sprites[:keese]
 
     set_default_position(y_offset: KEESE_Y_OFFSETS.sample)
   end
@@ -83,9 +79,7 @@ class WhiteKeese < Keese
   def initialize(window)
     super
 
-    @sprites = Gosu::Image.load_tiles(
-      @window, 'assets/sprites/keese_white.png', @width, @height, true
-    )
+    @sprites = @window.sprites[:keese_white]
   end
 
   def update
